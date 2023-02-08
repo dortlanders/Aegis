@@ -321,6 +321,7 @@
     <string name="normal_viewmode_title">Normal</string>
     <string name="compact_mode_title">Compact</string>
     <string name="small_mode_title">Small</string>
+    <string name="tiles_mode_title">Tiles</string>
     <string name="unknown_issuer">Unknown issuer</string>
     <string name="unknown_account_name">Unknown account name</string>
     <plurals name="import_error_dialog">

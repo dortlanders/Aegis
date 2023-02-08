@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,14 +7,12 @@
     android:clickable="true"
     android:focusable="true"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    app:cardCornerRadius="6dp"
+    android:clipChildren="true">
 
     <LinearLayout
         android:orientation="horizontal"
-        android:background="?attr/cardBackground"
         android:id="@+id/rlCardEntry"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -25,29 +23,6 @@
             android:layout_marginStart="-11dp"
             android:backgroundTint="@color/colorFavorite"
             android:background="@drawable/button_rounded_corners" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingStart="16dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ivTextDrawable"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ivSelected"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/item_selected"
-                android:visibility="gone"
-                app:civ_circle_background_color="@color/colorPrimarySelected" />
-        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -62,52 +37,73 @@
             android:paddingRight="8dp"
             android:paddingStart="8dp">
 
-        <TextView
-            android:id="@+id/profile_copied"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:includeFontPadding="false"
-            android:maxLines="1"
-            android:text="@string/copied"
-            android:layout_above="@+id/description"
-            android:layout_alignStart="@+id/profile_code"
-            android:textColor="?attr/secondaryText"
-            android:textSize="13sp"
-            android:visibility="invisible" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/description"
-            android:layout_alignStart="@+id/profile_code">
-
-
-            <TextView
+            <RelativeLayout
+                android:id="@+id/layoutImage"
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/profile_issuer"
-                android:text="@string/issuer"
-                android:textColor="?attr/primaryText"
-                android:textStyle="bold"
-                android:includeFontPadding="false"
-                android:textSize="13sp"
-                android:ellipsize="end"
-                android:maxLines="1"/>
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/profile_account_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@id/profile_issuer"
-                android:layout_marginStart="4dp"
-                android:ellipsize="end"
-                android:includeFontPadding="false"
-                android:maxLines="1"
-                android:textColor="@color/extra_info_text"
-                android:textSize="13sp"
-                tools:text=" - AccountName" />
-        </RelativeLayout>
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/ivTextDrawable"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_alignParentStart="true" />
 
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/ivSelected"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_alignParentStart="true"
+                        android:src="@drawable/item_selected"
+                        android:visibility="gone"
+                        app:civ_circle_background_color="@color/colorPrimarySelected" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/description"
+                android:layout_toEndOf="@+id/layoutImage">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_issuer"
+                    android:text="@string/issuer"
+                    android:textColor="?attr/primaryText"
+                    android:textStyle="bold"
+                    android:includeFontPadding="false"
+                    android:textSize="11sp"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
+
+
+                <TextView
+                    android:id="@+id/profile_copied"
+                    android:layout_width="wrap_content"
+                    android:layout_below="@id/profile_issuer"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:includeFontPadding="false"
+                    android:visibility="invisible"
+                    android:text="@string/copied"
+                    android:textColor="?attr/secondaryText"
+                    android:textSize="9sp" />
+
+                <TextView
+                    android:id="@+id/profile_account_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_issuer"
+                    android:ellipsize="end"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:textColor="@color/extra_info_text"
+                    android:textSize="9sp"
+                    tools:text=" - AccountName" />
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -122,9 +118,8 @@
                 android:fallbackLineSpacing="false"
                 android:textSize="26sp"
                 android:textColor="?attr/codePrimaryText"
-                android:layout_marginStart="6dp"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="0dp"
+                android:layout_marginTop="10dp"
                 android:textStyle="normal|bold"/>
 
         </RelativeLayout>
@@ -179,4 +174,4 @@
             android:layout_weight="1"/>
     </LinearLayout>
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>

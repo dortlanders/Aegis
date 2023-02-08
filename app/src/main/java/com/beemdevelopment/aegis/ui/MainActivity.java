@@ -937,8 +937,8 @@ public class MainActivity extends AegisActivity implements EntryListView.Listene
     }
 
     @Override
-    public void onEntryMove(VaultEntry entry1, VaultEntry entry2) {
-        _vaultManager.getVault().swapEntries(entry1, entry2);
+    public void onEntryMove(VaultEntry entry1, VaultEntry entry2, boolean adjacent) {
+        _vaultManager.getVault().swapEntries(entry1, entry2, adjacent);
     }
 
     @Override

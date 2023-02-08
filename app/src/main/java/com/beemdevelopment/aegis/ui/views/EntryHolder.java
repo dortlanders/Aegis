@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.beemdevelopment.aegis.Preferences;
 import com.beemdevelopment.aegis.R;
+import com.beemdevelopment.aegis.ViewMode;
 import com.beemdevelopment.aegis.helpers.IconViewHelper;
 import com.beemdevelopment.aegis.helpers.TextDrawableHelper;
 import com.beemdevelopment.aegis.helpers.ThemeHelper;
@@ -105,7 +106,7 @@ public class EntryHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void setData(VaultEntry entry, Preferences.CodeGrouping groupSize, boolean showAccountName, boolean showIcon, boolean showProgress, boolean hidden, boolean paused, boolean dimmed) {
+    public void setData(VaultEntry entry, Preferences.CodeGrouping groupSize, ViewMode viewMode, boolean showAccountName, boolean showIcon, boolean showProgress, boolean hidden, boolean paused, boolean dimmed) {
         _entry = entry;
         _hidden = hidden;
         _paused = paused;
@@ -127,7 +128,7 @@ public class EntryHolder extends RecyclerView.ViewHolder {
         String profileIssuer = entry.getIssuer();
         String profileName = showAccountName ? entry.getName() : "";
         if (!profileIssuer.isEmpty() && !profileName.isEmpty()) {
-            profileName = String.format(" (%s)", profileName);
+            profileName = viewMode.getFormattedAccountName(profileName);
         }
         _profileIssuer.setText(profileIssuer);
         _profileName.setText(profileName);
@@ -328,7 +329,7 @@ public class EntryHolder extends RecyclerView.ViewHolder {
         animateAlphaTo(DEFAULT_ALPHA);
     }
 
-    public void animateCopyText() {
+    public void animateCopyText(boolean includeSlideAnimation) {
         _animationHandler.removeCallbacksAndMessages(null);
 
         Animation slideDownFadeIn = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.slide_down_fade_in);
@@ -336,13 +337,23 @@ public class EntryHolder extends RecyclerView.ViewHolder {
         Animation fadeOut = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.fade_out);
         Animation fadeIn = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.fade_in);
 
-        _profileCopied.startAnimation(slideDownFadeIn);
-        _description.startAnimation(slideDownFadeOut);
+        if (includeSlideAnimation) {
+            _profileCopied.startAnimation(slideDownFadeIn);
+            _description.startAnimation(slideDownFadeOut);
 
-        _animationHandler.postDelayed(() -> {
-            _profileCopied.startAnimation(fadeOut);
-            _description.startAnimation(fadeIn);
-        }, 3000);
+            _animationHandler.postDelayed(() -> {
+                _profileCopied.startAnimation(fadeOut);
+                _description.startAnimation(fadeIn);
+            }, 3000);
+        } else {
+            _profileCopied.startAnimation(fadeIn);
+            _profileName.startAnimation(fadeOut);
+
+            _animationHandler.postDelayed(() -> {
+                _profileCopied.startAnimation(fadeOut);
+                _profileName.startAnimation(fadeIn);
+            }, 3000);
+        }
     }
 
     private void animateAlphaTo(float alpha) {

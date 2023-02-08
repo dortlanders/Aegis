@@ -98,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/profile_issuer"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="4dp"
                 android:ellipsize="end"
                 android:includeFontPadding="false"
                 android:maxLines="1"

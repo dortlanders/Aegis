@@ -63,6 +63,25 @@ public class UUIDMap <T extends UUIDMap.Value> implements Iterable<T>, Serializa
         return oldValue;
     }
 
+    public void move(T value1, T value2) {
+        List<T> values = new ArrayList<>();
+
+        for (T value : _map.values()) {
+            if (!value.getUUID().equals(value1.getUUID())) {
+                values.add(value);
+
+                if (value.getUUID().equals(value2.getUUID())) {
+                    values.add(value1);
+                }
+            }
+        }
+
+        _map.clear();
+        for (T value : values) {
+            _map.put(value.getUUID(), value);
+        }
+    }
+
     /**
      * Swaps the position of value1 and value2 in the internal map. This operation is
      * quite expensive because it has to reallocate the entire underlying LinkedHashMap.

@@ -26,6 +26,7 @@ import com.beemdevelopment.aegis.otp.HotpInfo;
 import com.beemdevelopment.aegis.otp.OtpInfo;
 import com.beemdevelopment.aegis.otp.OtpInfoException;
 import com.beemdevelopment.aegis.otp.TotpInfo;
+import com.beemdevelopment.aegis.util.CollectionUtils;
 import com.beemdevelopment.aegis.vault.VaultEntry;
 
 import java.util.ArrayList;
@@ -368,11 +369,17 @@ public class EntryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         // notify the vault first
-        _view.onEntryMove(_entries.get(firstPosition), _entries.get(secondPosition));
+        int difference = firstPosition - secondPosition;
+        _view.onEntryMove(_entries.get(firstPosition), _entries.get(secondPosition), Math.abs(difference) == 1);
 
-        // update our side of things
-        Collections.swap(_entries, firstPosition, secondPosition);
-        Collections.swap(_shownEntries, firstPosition, secondPosition);
+        if (Math.abs(difference) > 1) {
+            CollectionUtils.move(_entries, firstPosition, secondPosition);
+            CollectionUtils.move(_shownEntries, firstPosition, secondPosition);
+        } else {
+            Collections.swap(_entries, firstPosition, secondPosition);
+            Collections.swap(_shownEntries, firstPosition, secondPosition);
+        }
+
         notifyItemMoved(firstPosition, secondPosition);
     }
 
@@ -417,7 +424,7 @@ public class EntryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             boolean paused = _pauseFocused && entry == _focusedEntry;
             boolean dimmed = (_highlightEntry || _tempHighlightEntry) && _focusedEntry != null && _focusedEntry != entry;
             boolean showProgress = entry.getInfo() instanceof TotpInfo && ((TotpInfo) entry.getInfo()).getPeriod() != getMostFrequentPeriod();
-            entryHolder.setData(entry, _codeGroupSize, _showAccountName, _showIcon, showProgress, hidden, paused, dimmed);
+            entryHolder.setData(entry, _codeGroupSize, _viewMode, _showAccountName, _showIcon, showProgress, hidden, paused, dimmed);
             entryHolder.setFocused(_selectedEntries.contains(entry));
             entryHolder.setShowDragHandle(isEntryDraggable(entry));
 
@@ -435,7 +442,7 @@ public class EntryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                         if (_copyOnTap && !entryHolder.isHidden() && !(entry == _copiedEntry)) {
                             _view.onEntryCopy(entry);
-                            entryHolder.animateCopyText();
+                            entryHolder.animateCopyText(_viewMode != ViewMode.TILES);
                             _copiedEntry = entry;
                             copiedThisClick = true;
                             handled = true;
@@ -737,7 +744,7 @@ public class EntryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public interface Listener {
         void onEntryClick(VaultEntry entry);
         boolean onLongEntryClick(VaultEntry entry);
-        void onEntryMove(VaultEntry entry1, VaultEntry entry2);
+        void onEntryMove(VaultEntry entry1, VaultEntry entry2, boolean adjacent);
         void onEntryDrop(VaultEntry entry);
         void onEntryChange(VaultEntry entry);
         void onEntryCopy(VaultEntry entry);
